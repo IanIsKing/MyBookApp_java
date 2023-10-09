@@ -60,6 +60,29 @@ public class BookDAO {
         return null;
     }
 
+    // Get a book by its Title
+    public Book getBookByTitle(String Title) throws SQLException {
+        // The ? is a placeholder for a value that we will set later
+        String sql = "SELECT id, title, author, qty FROM books WHERE Title=?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            // set the value of the placeholder to the id we are looking for
+            statement.setString(1, Title);
+            // execute the query and return the book
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    String title = resultSet.getString("title");
+                    String author = resultSet.getString("author");
+                    int qty = resultSet.getInt("qty");
+                    int id = resultSet.getInt("id");
+                    Book book = new Book(title, author, qty);
+                    book.setId(id);
+                    return book;
+                }
+            }
+        }
+        return null;
+    }
+
     // Get all books from the database
     public List<Book> getAllBooks() throws SQLException {
         List<Book> books = new ArrayList<>();

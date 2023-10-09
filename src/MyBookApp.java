@@ -1,3 +1,5 @@
+// Note to Lecturer - please read my README.md file for more information about this project
+
 import java.util.List;
 import java.util.Scanner;
 import java.sql.*;
@@ -133,15 +135,40 @@ public class MyBookApp {
 
     // Prints the search book menu
     private static void searchBook(Scanner scanner, BookDAO bookDAO) throws SQLException {
-        System.out.println("Enter the ID of the book you want to search: ");
-        int searchId = scanner.nextInt();
+        System.out.println("Search by: 1 - ID, 2 - Title,");
+        int searchOption = scanner.nextInt();
         scanner.nextLine();
 
-        // Check if the book exists
-        Book existingBook = bookDAO.getBookById(searchId);
-        if (existingBook == null) {
-            System.out.println("No book found with the given ID!");
-            return;
+        Book existingBook = null;
+
+        switch (searchOption) {
+            // Search by ID
+            case 1:
+                System.out.println("Enter the ID of the book you want to search: ");
+                int searchId = scanner.nextInt();
+                scanner.nextLine();
+
+                // Check if the book exists
+                existingBook = bookDAO.getBookById(searchId);
+                if (existingBook == null) {
+                    System.out.println("No book found with the given ID!");
+                    return;
+                }
+                break;
+            // Search by Title
+            case 2:
+                System.out.println("Enter the Title of the book you want to search: ");
+                String searchTitle = scanner.nextLine();
+                // Check if the book exists
+                existingBook = bookDAO.getBookByTitle(searchTitle);
+                if (existingBook == null) {
+                    System.out.println("No book found with the given Title!");
+                    return;
+                }
+                break;
+            default:
+                System.out.println("Error! Not a valid command.\n");
+                break;
         }
 
         // Print the book details
